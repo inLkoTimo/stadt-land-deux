@@ -104,7 +104,7 @@ test("Stopp beendet das Schreiben fuer beide sofort", () => {
 
 // --- Punkte --------------------------------------------------------------
 
-test("einzigartige gueltige Antwort gibt 20 Punkte", () => {
+test("haben beide eine gueltige Antwort, gibt es 10 Punkte fuer beide - egal ob gleich oder verschieden", () => {
   const result = scoreRound(
     ["Stadt"],
     "B",
@@ -112,11 +112,11 @@ test("einzigartige gueltige Antwort gibt 20 Punkte", () => {
     { player1: [], player2: [] },
   );
 
-  assert.equal(result.points.player1.Stadt, 20);
-  assert.equal(result.points.player2.Stadt, 20);
+  assert.equal(result.points.player1.Stadt, 10);
+  assert.equal(result.points.player2.Stadt, 10);
 });
 
-test("gleiche Antwort gibt beiden 10 Punkte", () => {
+test("das gilt auch, wenn beide woertlich dieselbe Antwort haben", () => {
   const result = scoreRound(
     ["Stadt"],
     "B",
@@ -190,8 +190,8 @@ test("naechste Runde zaehlt Punkte gut und wuerfelt neu", () => {
 
   assert.equal(next.phase, "writing");
   assert.equal(next.round, 2);
-  assert.equal(next.scores.player1, 20);
-  assert.equal(next.scores.player2, 20);
+  assert.equal(next.scores.player1, 10);
+  assert.equal(next.scores.player2, 10);
   assert.equal(next.history.length, 1);
   assert.equal(next.answers.player1.Stadt, "");
   assert.equal(next.usedLetters.length, 2);

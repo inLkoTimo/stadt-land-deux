@@ -198,10 +198,6 @@ export function toggleInvalid(
   };
 }
 
-function normalizeAnswer(value: string): string {
-  return value.trim().toLowerCase();
-}
-
 function startsWithLetter(value: string, letter: string): boolean {
   return value.trim().toUpperCase().startsWith(letter.toUpperCase());
 }
@@ -245,10 +241,13 @@ export function scoreRound(
     let p1 = 0;
     let p2 = 0;
 
+    // Beide gueltig -> 10 Punkte fuer beide (unabhaengig davon, ob
+    // die Antworten gleich oder verschieden sind). Nur eine Person
+    // gueltig -> diese Person bekommt 20 Punkte. Keine gueltig ->
+    // 0 Punkte.
     if (valid1 && valid2) {
-      const same = normalizeAnswer(raw1) === normalizeAnswer(raw2);
-      p1 = same ? 10 : 20;
-      p2 = same ? 10 : 20;
+      p1 = 10;
+      p2 = 10;
     } else if (valid1) {
       p1 = 20;
     } else if (valid2) {
