@@ -8,6 +8,7 @@ import {
   saveState,
   subscribeToGame,
   withLatestState,
+  writeAnswerField,
 } from "@/lib/firebase/games";
 import {
   addCategory,
@@ -17,11 +18,11 @@ import {
   isGameState,
   nextRound,
   removeCategory,
-  setAnswer,
   startFirstRound,
   toggleInvalid,
 } from "@/lib/game/state";
 import type { GameRow, Player } from "@/lib/game/types";
+import { playerKey } from "@/lib/game/types";
 
 export type Screen = "home" | "create" | "join" | "lobby" | "game";
 
@@ -228,12 +229,10 @@ export function useGameRoom() {
       }
 
       try {
-        const row = await withLatestState(gameId, (latest) =>
-          setAnswer(latest, playerNumber, category, text),
-        );
-        if (row) {
-          setGame(row);
-        }
+        // Direktes Feld-Update statt Transaktion - siehe Kommentar
+        // bei writeAnswerField. Der Live-Abgleich via
+        // subscribeToGame holt die Bestaetigung automatisch nach.
+        await writeAnswerField(gameId, playerKey(playerNumber), category, text);
       } catch {
         // Ein einzelner verlorener Tastenanschlag ist kein Drama -
         // der naechste Sync gleicht das automatisch wieder an.

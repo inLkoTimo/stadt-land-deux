@@ -219,3 +219,25 @@ export function subscribeToGame(
     }
   });
 }
+
+/** Direktes Schreiben einer einzelnen Antwort, ohne Transaktion.
+ *  Beim Tippen speichern wir sehr oft (alle paar hundert
+ *  Millisekunden) - eine volle Lese-Aendern-Schreiben-Transaktion
+ *  wuerde dabei staendig mit sich selbst kollidieren (Firestore
+ *  bricht dann intern ab und versucht es neu, was in der Konsole
+ *  wie ein Fehler aussieht). Ein Feld gezielt per Punkt-Pfad zu
+ *  setzen betrifft nur genau diese eine Antwort und ist deshalb
+ *  konfliktfrei. */
+export async function writeAnswerField(
+  id: string,
+  player: "player1" | "player2",
+  category: string,
+  text: string,
+): Promise<void> {
+  const ref = doc(getDb(), COLLECTION, id);
+
+  await updateDoc(ref, {
+    [`game_state.answers.${player}.${category}`]: text,
+    updated_at: new Date().toISOString(),
+  });
+}
