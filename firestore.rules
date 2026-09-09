@@ -1,0 +1,22 @@
+rules_version = '2';
+
+// Im Firebase-Konsolen unter "Firestore Database" -> "Regeln"
+// einfuegen und veroeffentlichen.
+//
+// Ehrlicher Hinweis wie bei den anderen Spielen: die App schreibt
+// ohne Login direkt in die Datenbank. Diese Regeln erlauben daher
+// jedem mit der Firebase-Konfiguration, Partien zu lesen und zu
+// aendern - geloescht werden kann nichts. Fuer den Freundeskreis
+// ist das in Ordnung, fuer eine oeffentliche Version waere eine
+// serverseitige Pruefung (z. B. Cloud Function) der naechste
+// sinnvolle Schritt.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /sld_games/{gameId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if false;
+    }
+  }
+}
