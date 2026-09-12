@@ -37,9 +37,10 @@ erstellen, Code kopieren, beitreten.
 3. Person 1 startet die erste Runde: ein Buchstabe wird gewürfelt.
 4. Beide schreiben gleichzeitig los. Wer fertig ist, ruft Stopp -
    das beendet die Runde sofort für beide.
-5. Auswertung: haben beide eine gültige Antwort = 10 Punkte für
-   beide (egal ob gleich oder verschieden), hat nur eine Person eine
-   gültige Antwort = 20 Punkte für diese Person, leer oder falscher
+5. Auswertung: haben beide eine gültige, aber unterschiedliche
+   Antwort = 10 Punkte für beide, haben beide wörtlich dieselbe
+   Antwort = 5 Punkte für beide, hat nur eine Person eine gültige
+   Antwort = 20 Punkte für diese Person, leer oder falscher
    Buchstabe = 0. Offensichtlich falsche Antworten lassen sich von
    Hand als ungültig markieren.
 6. Person 1 startet die nächste Runde oder beendet das Spiel.

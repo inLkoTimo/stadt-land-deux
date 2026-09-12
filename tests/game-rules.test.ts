@@ -104,7 +104,7 @@ test("Stopp beendet das Schreiben fuer beide sofort", () => {
 
 // --- Punkte --------------------------------------------------------------
 
-test("haben beide eine gueltige Antwort, gibt es 10 Punkte fuer beide - egal ob gleich oder verschieden", () => {
+test("haben beide eine gueltige, aber verschiedene Antwort, gibt es 10 Punkte fuer beide", () => {
   const result = scoreRound(
     ["Stadt"],
     "B",
@@ -116,7 +116,7 @@ test("haben beide eine gueltige Antwort, gibt es 10 Punkte fuer beide - egal ob 
   assert.equal(result.points.player2.Stadt, 10);
 });
 
-test("das gilt auch, wenn beide woertlich dieselbe Antwort haben", () => {
+test("haben beide woertlich dieselbe Antwort, gibt es nur 5 Punkte fuer beide", () => {
   const result = scoreRound(
     ["Stadt"],
     "B",
@@ -124,8 +124,8 @@ test("das gilt auch, wenn beide woertlich dieselbe Antwort haben", () => {
     { player1: [], player2: [] },
   );
 
-  assert.equal(result.points.player1.Stadt, 10);
-  assert.equal(result.points.player2.Stadt, 10);
+  assert.equal(result.points.player1.Stadt, 5);
+  assert.equal(result.points.player2.Stadt, 5);
 });
 
 test("leere oder falsch beginnende Antworten geben 0 Punkte", () => {

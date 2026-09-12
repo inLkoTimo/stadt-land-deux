@@ -202,6 +202,10 @@ function startsWithLetter(value: string, letter: string): boolean {
   return value.trim().toUpperCase().startsWith(letter.toUpperCase());
 }
 
+function normalizeAnswer(value: string): string {
+  return value.trim().toLowerCase();
+}
+
 export type RoundScore = {
   points: PlayerMap<Record<string, number>>;
   total1: number;
@@ -209,8 +213,10 @@ export type RoundScore = {
 };
 
 /** Reine Punkte-Funktion, unabhaengig von React/Supabase -
- *  20 Punkte fuer eine einzigartige gueltige Antwort, 10 wenn
- *  beide dasselbe haben, 0 wenn ungueltig oder leer. */
+ *  20 Punkte, wenn der andere gar nichts (Gueltiges) eingegeben hat,
+ *  10 Punkte fuer beide bei unterschiedlichen gueltigen Antworten,
+ *  5 Punkte fuer beide bei gleicher gueltiger Antwort, 0 wenn
+ *  ungueltig oder leer. */
 export function scoreRound(
   categories: string[],
   letter: string,
@@ -241,13 +247,14 @@ export function scoreRound(
     let p1 = 0;
     let p2 = 0;
 
-    // Beide gueltig -> 10 Punkte fuer beide (unabhaengig davon, ob
-    // die Antworten gleich oder verschieden sind). Nur eine Person
-    // gueltig -> diese Person bekommt 20 Punkte. Keine gueltig ->
-    // 0 Punkte.
+    // Beide gueltig -> 10 Punkte fuer beide, wenn die Antworten
+    // verschieden sind, 5 Punkte fuer beide, wenn sie gleich sind.
+    // Nur eine Person gueltig -> diese Person bekommt 20 Punkte.
+    // Keine gueltig -> 0 Punkte.
     if (valid1 && valid2) {
-      p1 = 10;
-      p2 = 10;
+      const same = normalizeAnswer(raw1) === normalizeAnswer(raw2);
+      p1 = same ? 5 : 10;
+      p2 = same ? 5 : 10;
     } else if (valid1) {
       p1 = 20;
     } else if (valid2) {
