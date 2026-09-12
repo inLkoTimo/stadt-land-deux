@@ -45,6 +45,10 @@ erstellen, Code kopieren, beitreten.
    Hand als ungültig markieren.
 6. Person 1 startet die nächste Runde oder beendet das Spiel.
 
+Ueber dem Chat-Knopf unten rechts koennen sich beide waehrend des
+ganzen Spiels schreiben (auch waehrend des Schreibens und der
+Auswertung).
+
 ## Aufbau
 
 ```

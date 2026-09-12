@@ -14,6 +14,13 @@ export type GamePhase = "categories" | "writing" | "scoring" | "finished";
 /** Antworten einer Person in einer Runde: Kategorie -> eingetippter Text. */
 export type CategoryAnswers = Record<string, string>;
 
+export type ChatMessage = {
+  id: string;
+  player: Player;
+  text: string;
+  createdAt: number;
+};
+
 export type RoundResult = {
   round: number;
   letter: string;
@@ -54,6 +61,8 @@ export type GameState = {
 
   scores: PlayerMap<number>;
   history: RoundResult[];
+
+  chat: ChatMessage[];
 };
 
 export type WaitingState = {

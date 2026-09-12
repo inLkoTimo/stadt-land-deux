@@ -16,6 +16,9 @@ export const TIMING = {
 
 export const MIN_CATEGORIES = 3;
 
+/** Schnelle Reaktionen fuer den Chat, per Klick ohne Tippen. */
+export const REACTIONS = ["❤️", "😂", "😮", "👏", "🔥", "🤔", "😅", "🎉"];
+
 /** 100 Vorschlaege zum Schnell-Hinzufuegen. Eigene Kategorien
  *  koennen zusaetzlich frei eingetippt werden. */
 export const CATEGORY_SUGGESTIONS: string[] = [

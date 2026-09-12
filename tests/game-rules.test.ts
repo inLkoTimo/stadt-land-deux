@@ -4,6 +4,7 @@ import { test } from "node:test";
 import { LETTERS } from "../lib/game/constants";
 import {
   addCategory,
+  appendChat,
   callStop,
   canStartFirstRound,
   createCategoryState,
@@ -222,4 +223,24 @@ test("Buchstaben wiederholen sich erst, wenn alle einmal dran waren", () => {
 
   assert.equal(new Set(state.usedLetters).size, state.usedLetters.length);
   assert.ok(state.usedLetters.length <= LETTERS.length);
+});
+
+test("appendChat haengt eine Nachricht an und merkt sich den Absender", () => {
+  const state = withCategories(["Stadt"]);
+  const next = appendChat(state, 1, "Hallo!");
+
+  assert.equal(next.chat.length, 1);
+  assert.equal(next.chat[0].player, 1);
+  assert.equal(next.chat[0].text, "Hallo!");
+});
+
+test("appendChat trimmt und begrenzt auf die letzten 30 Nachrichten", () => {
+  let state = withCategories(["Stadt"]);
+
+  for (let i = 0; i < 35; i++) {
+    state = appendChat(state, 1, `Nachricht ${i}`);
+  }
+
+  assert.equal(state.chat.length, 30);
+  assert.equal(state.chat[state.chat.length - 1].text, "Nachricht 34");
 });

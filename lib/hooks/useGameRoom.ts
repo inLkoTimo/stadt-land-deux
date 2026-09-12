@@ -12,6 +12,7 @@ import {
 } from "@/lib/firebase/games";
 import {
   addCategory,
+  appendChat,
   callStop,
   createCategoryState,
   endGame,
@@ -314,6 +315,29 @@ export function useGameRoom() {
     }
   }, [gameId, isHost]);
 
+  const say = useCallback(
+    async (text: string, kind: "chat" | "reaction" = "chat") => {
+      const message = text.trim();
+
+      if (!message || !gameId || !playerNumber) {
+        return;
+      }
+
+      try {
+        const row = await withLatestState(gameId, (latest) =>
+          appendChat(latest, playerNumber, message, kind),
+        );
+
+        if (row) {
+          setGame(row);
+        }
+      } catch {
+        // Chat ist nicht spielentscheidend - Fehler bleiben still.
+      }
+    },
+    [gameId, playerNumber],
+  );
+
   const leave = useCallback(() => {
     setGame(null);
     setPlayerNumber(null);
@@ -343,6 +367,7 @@ export function useGameRoom() {
       toggleAnswerInvalid,
       advance,
       finish,
+      say,
       leave,
     },
   };

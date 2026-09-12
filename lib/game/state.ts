@@ -1,6 +1,7 @@
 import { LETTERS, MIN_CATEGORIES, STATE_VERSION, TIMING } from "./constants";
 import {
   type CategoryAnswers,
+  type ChatMessage,
   type GamePhase,
   type GameState,
   type Player,
@@ -35,6 +36,7 @@ export function createCategoryState(): GameState {
     stoppedBy: null,
     scores: { player1: 0, player2: 0 },
     history: [],
+    chat: [],
   };
 }
 
@@ -359,6 +361,32 @@ export function phaseLabel(phase: GamePhase): string {
     case "finished":
       return "Beendet";
   }
+}
+
+const MAX_CHAT_MESSAGES = 30;
+
+function appendMessage(chat: ChatMessage[], message: ChatMessage): ChatMessage[] {
+  return [...chat, message].slice(-MAX_CHAT_MESSAGES);
+}
+
+/** Chat-Nachricht oder Schnell-Reaktion anhaengen - komplett
+ *  unabhaengig von Spielphase oder Rundenlogik, damit man auch
+ *  waehrend des Schreibens oder der Auswertung schreiben kann. */
+export function appendChat(
+  state: GameState,
+  player: Player,
+  text: string,
+  kind: "chat" | "reaction" = "chat",
+): GameState {
+  return {
+    ...state,
+    chat: appendMessage(state.chat, {
+      id: `${kind}-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      player,
+      text,
+      createdAt: Date.now(),
+    }),
+  };
 }
 
 export { otherPlayer };

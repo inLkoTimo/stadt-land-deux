@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CategoryScreen } from "./game/CategoryScreen";
+import { ChatOverlay } from "./game/ChatOverlay";
 import { FinishedScreen } from "./game/FinishedScreen";
 import { RoundScreen } from "./game/RoundScreen";
 import { ScoringScreen } from "./game/ScoringScreen";
@@ -100,53 +101,75 @@ export function StadtLandDeuxApp() {
     return <LoadingScreen label="Wird vorbereitet..." />;
   }
 
+  const chatOverlay = (
+    <ChatOverlay
+      messages={state.chat}
+      me={playerNumber}
+      player1Name={game.player1_name}
+      player2Name={game.player2_name ?? "Spieler 2"}
+      onSend={(text, kind) => void actions.say(text, kind)}
+    />
+  );
+
   if (state.phase === "categories") {
     return (
-      <CategoryScreen
-        state={state}
-        isHost={isHost}
-        loading={loading}
-        onAdd={(label) => void actions.addCategory(label)}
-        onRemove={(label) => void actions.removeCategory(label)}
-        onStart={() => void actions.startRound()}
-        onLeave={actions.leave}
-      />
+      <>
+        <CategoryScreen
+          state={state}
+          isHost={isHost}
+          loading={loading}
+          onAdd={(label) => void actions.addCategory(label)}
+          onRemove={(label) => void actions.removeCategory(label)}
+          onStart={() => void actions.startRound()}
+          onLeave={actions.leave}
+        />
+        {chatOverlay}
+      </>
     );
   }
 
   if (state.phase === "writing") {
     return (
-      <RoundScreen
-        game={game}
-        state={state}
-        me={playerNumber}
-        onWriteAnswer={(category, text) =>
-          void actions.writeAnswer(category, text)
-        }
-        onStop={() => void actions.stop()}
-        onLeave={actions.leave}
-      />
+      <>
+        <RoundScreen
+          game={game}
+          state={state}
+          me={playerNumber}
+          onWriteAnswer={(category, text) =>
+            void actions.writeAnswer(category, text)
+          }
+          onStop={() => void actions.stop()}
+          onLeave={actions.leave}
+        />
+        {chatOverlay}
+      </>
     );
   }
 
   if (state.phase === "scoring") {
     return (
-      <ScoringScreen
-        game={game}
-        state={state}
-        me={playerNumber}
-        isHost={isHost}
-        onToggleInvalid={(target, category) =>
-          void actions.toggleAnswerInvalid(target, category)
-        }
-        onAdvance={() => void actions.advance()}
-        onFinish={() => void actions.finish()}
-        onLeave={actions.leave}
-      />
+      <>
+        <ScoringScreen
+          game={game}
+          state={state}
+          me={playerNumber}
+          isHost={isHost}
+          onToggleInvalid={(target, category) =>
+            void actions.toggleAnswerInvalid(target, category)
+          }
+          onAdvance={() => void actions.advance()}
+          onFinish={() => void actions.finish()}
+          onLeave={actions.leave}
+        />
+        {chatOverlay}
+      </>
     );
   }
 
   return (
-    <FinishedScreen game={game} state={state} onLeave={actions.leave} />
+    <>
+      <FinishedScreen game={game} state={state} onLeave={actions.leave} />
+      {chatOverlay}
+    </>
   );
 }

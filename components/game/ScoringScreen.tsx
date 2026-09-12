@@ -131,6 +131,21 @@ export function ScoringScreen({
           ))}
         </div>
 
+        <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-slate-400">
+            Gesamtstand
+          </span>
+          <div className="flex items-center gap-3 font-bold">
+            <span className="text-teal-300">
+              {game.player1_name} {state.scores.player1 + result.total1}
+            </span>
+            <span className="text-slate-600">:</span>
+            <span className="text-amber-300">
+              {state.scores.player2 + result.total2} {game.player2_name}
+            </span>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-2 pt-2 sm:flex-row">
           <button
             type="button"
